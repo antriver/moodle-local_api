@@ -49,6 +49,7 @@ if (password_verify($password, $user->password)) {
     // (Don't want to give unnecessary stuff here)
     $response['user'] = array(
         'id' => $user->id,
+        'idnumber' => $user->idnumber,
         'username' => $user->username,
         'email' => $user->email,
         'auth' => $user->auth
