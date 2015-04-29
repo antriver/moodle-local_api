@@ -13,38 +13,95 @@
 require dirname(dirname(dirname(__FILE__))) . '/config.php';
 require_once $CFG->dirroot . '/lib/password_compat/lib/password.php';
 
-header('Content-type: application/json');
+$api = new local_api\Api();
 
+$debug = print_r($_GET, true) . print_r($_POST, true) . print_r($_SERVER, true);
+file_put_contents('debug.txt', $debug);
+
+$format = !empty($_GET['format']) ? $_GET['format'] : 'json';
+$successText = null;
 $response = array();
 
 /**
  * Parameters
  */
-if (!empty($_POST['email'])) {
-    $email = $_POST['email'];
-} else {
-    die(json_encode(array('error' => get_string('auth_no_email', 'local_api'))));
+
+$mode = !empty($_GET['mode']) ? $_GET['mode'] : 'post';
+
+$username = null;
+$password = null;
+
+switch ($mode) {
+
+    case 'http':
+
+        if (isset($_SERVER['PHP_AUTH_USER'])) {
+            $username = $_SERVER['PHP_AUTH_USER'];
+            $password = $_SERVER['PHP_AUTH_PW'];
+        } elseif (isset($_SERVER['HTTP_AUTHENTICATION'])) {
+            if (strpos(strtolower($_SERVER['HTTP_AUTHENTICATION']), 'basic') === 0) {
+                list($username, $password) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
+            }
+        }
+
+        $api->setJson(true);
+
+        break;
+
+    case 'post':
+
+        if (isset($_POST['username'])) {
+            $username = $_POST['username'];
+        }
+
+        if (isset($_POST['password'])) {
+            $password = $_POST['password'];
+        }
+
+        $api->setJson(true);
+
+        break;
+
+    case 'pam':
+
+        if (isset($_POST['username'])) {
+            $username = $_POST['username'];
+        }
+
+        if (isset($_POST['password'])) {
+            $password = $_POST['password'];
+        }
+
+        $successText = 'OK';
+        $api->setJson(false);
+
+        break;
+
+    default:
+        $api->error('invalid_mode', 400);
+
 }
 
-if (!empty($_POST['password'])) {
-    $password = $_POST['password'];
-} else {
-    die(json_encode(array('error' => get_string('auth_no_password', 'local_api'))));
+if (empty($username)) {
+    $api->error('auth_no_username', 403);
+}
+
+if (empty($password)) {
+    $api->error('auth_no_password', 403);
 }
 
 /**
  * Load the user's info from the database
  */
-$user = $DB->get_record('user', array('email' => $email));
+$user = $DB->get_record('user', array('username' => $username));
 if (!$user) {
-    die(json_encode(array('error' => get_string('auth_user_not_found', 'local_api'))));
+    $api->error('auth_user_not_found', 403);
 }
 
 /**
  * Check the password is correct
  */
 if (password_verify($password, $user->password)) {
-    // TODO: Add settings to define what gets returned
     // Specify what information to give in the response
     // (Don't want to give unnecessary stuff here)
     $response['user'] = array(
@@ -55,7 +112,14 @@ if (password_verify($password, $user->password)) {
         'auth' => $user->auth
     );
 } else {
-    die(json_encode(array('error' => get_string('auth_incorrect_password', 'local_api'))));
+    $api->error('auth_incorrect_password', 403);
 }
 
-echo json_encode($response);
+/**
+ * Success!
+ */
+if ($successText) {
+    echo $successText;
+} else {
+    echo json_encode($response);
+}
