@@ -6,7 +6,13 @@ class Api
 {
     public $json = true;
 
-    public static function error($string, $httpStatusCode = null)
+    public function debug()
+    {
+        $debug = print_r($_GET, true) . print_r($_POST, true) . print_r($_SERVER, true);
+        file_put_contents(dirname(__FILE__) . '/../debug.txt', $debug);
+    }
+
+    public function error($string, $httpStatusCode = null)
     {
         if ($httpStatusCode) {
             http_response_code($httpStatusCode);

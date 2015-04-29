@@ -14,20 +14,16 @@ require dirname(dirname(dirname(__FILE__))) . '/config.php';
 require_once $CFG->dirroot . '/lib/password_compat/lib/password.php';
 
 $api = new local_api\Api();
-
-$debug = print_r($_GET, true) . print_r($_POST, true) . print_r($_SERVER, true);
-file_put_contents('debug.txt', $debug);
-
-$format = !empty($_GET['format']) ? $_GET['format'] : 'json';
-$successText = null;
-$response = array();
+//$api->debug();
 
 /**
  * Parameters
  */
 
-$mode = !empty($_GET['mode']) ? $_GET['mode'] : 'post';
+$successText = null;
+$mode = !empty($_POST['mode']) ? $_POST['mode'] : 'post';
 
+$response = array();
 $username = null;
 $password = null;
 
