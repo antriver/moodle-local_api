@@ -105,7 +105,9 @@ if (password_verify($password, $user->password)) {
         'idnumber' => $user->idnumber,
         'username' => $user->username,
         'email' => $user->email,
-        'auth' => $user->auth
+        'auth' => $user->auth,
+        'firstname' => $user->firstname,
+        'lastname' => $user->lastname,
     );
 } else {
     $api->error('auth_incorrect_password', 403);
