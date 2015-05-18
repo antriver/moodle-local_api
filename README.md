@@ -30,7 +30,7 @@ Authenticates users. [Read this to authenticate with PAM](docs/PAM.md)
     "id": "901",
     "idnumber": "99999",
     "username": "happystudent",
-    "email": "happystudent@student.ssis-suzhou.net",
+    "email": "happystudent@email.com",
     "auth": "manual",
     "firstname": "Happy",
     "lastname": "Student"
