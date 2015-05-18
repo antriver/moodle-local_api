@@ -8,6 +8,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2015042800;
-$plugin->requires = 2013111800; // MOODLE_26_STABLE
+$plugin->version = 2015051800;
+$plugin->requires = 2013051400; // MOODLE_25
 $plugin->component = 'local_api';

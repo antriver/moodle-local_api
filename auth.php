@@ -13,6 +13,7 @@
 require dirname(dirname(dirname(__FILE__))) . '/config.php';
 require_once $CFG->dirroot . '/lib/password_compat/lib/password.php';
 
+require_once __DIR__ . '/classes/Api.php'; // For < MOODLE_26 compatibility
 $api = new local_api\Api();
 //$api->debug();
 
