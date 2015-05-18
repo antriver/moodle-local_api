@@ -1,48 +1,45 @@
-Moodle API
-=============
-Allow remote applications to access Moodle data.
+# Moodle API
+Provides a REST API for external access to Moodle data.
 
-
-Using PAM to authenticate with this
--------------
-
+# Installation
+```bash
+cd /path/to/moodle
+git clone https://github.com/antriver/moodle-local_api.git local/api
 ```
-apt-get install git build-essential libpam0g-dev libcurl4-openssl-dev libconfig-dev
-git clone https://github.com/antriver/pam_url.git
-cd pam_url
-make clean all
-cp pam_url.so /lib/security/pam_url.so
-vi /etc/pam_url.conf
-```
-```
-# pam_url configuration file
 
-pam_url:
+# Endpoints
+
+## POST /local/api/auth.php
+
+Authenticates users. [Read this to authenticate with PAM](docs/PAM.md)
+
+### Request
+
+| Parameter | Required? | Details                                                                                                                                                                                                                                                         |
+|-----------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| username  | Yes       |                                                                                                                                                                                                                                                                 |
+| password  | Yes       |                                                                                                                                                                                                                                                                 |
+| mode      |           | Options:<br>**post** (Default): POSTed username and password are checked. JSON is returned.<br>**pam**: POSTed username and password are checked. The text 'OK' is returned if valid.<br>**http**: HTTP authentication username and password are checked. JSON is returned. |
+
+### Response
+
+#### Success
+```
 {
-    settings:
-    {
-        url         = "https://www.my-mood-site.com/local/api/auth.php"; # URI to fetch
-        returncode  = "OK";                        # The remote script/cgi should return a 200 http code and this string as its only results
-        userfield   = "username";                      # userfield name to send
-        passwdfield = "password";                     # passwdfield name to send
-        extradata   = "&mode=pam";                 # extra data to send
-        prompt      = "Password: ";                   # password prompt
-    };
-
-    ssl:
-    {
-        use_client_cert = false;
-        verify_peer = true;                               # Verify peer?
-        verify_host = true;                               # Make sure peer CN matches?
-    };
-};
-
-# END
-
+  "user": {
+    "id": "901",
+    "idnumber": "99999",
+    "username": "happystudent",
+    "email": "happystudent@student.ssis-suzhou.net",
+    "auth": "manual",
+    "firstname": "Happy",
+    "lastname": "Student"
+  }
+}
 ```
+#### Error
 ```
-vi /etc/pam.d/login
-```
-```
-auth sufficient pam_url.so
+{
+  "error": "Incorrect password"
+}
 ```
