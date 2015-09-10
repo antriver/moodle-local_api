@@ -1,19 +1,19 @@
 # Moodle API
-Provides a REST API for external access to Moodle data.
+Provides a REST API to allow external software to access data from Moodle.
 
-# Installation
+## Setup
 ```bash
 cd /path/to/moodle
 git clone https://github.com/antriver/moodle-local_api.git local/api
 ```
 
-# Endpoints
+## Endpoints
 
-## POST /local/api/auth.php
+### POST /local/api/auth.php
 
 Authenticates users. [Read this to authenticate with PAM](docs/PAM.md)
 
-### Request
+#### Request
 
 | Parameter | Required? | Details                                                                                                                                                                                                                                                         |
 |-----------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -21,9 +21,9 @@ Authenticates users. [Read this to authenticate with PAM](docs/PAM.md)
 | password  | Yes       |                                                                                                                                                                                                                                                                 |
 | mode      |           | Options:<br>**post** (Default): POSTed username and password are checked. JSON is returned.<br>**pam**: POSTed username and password are checked. The text 'OK' is returned if valid.<br>**http**: HTTP authentication username and password are checked. JSON is returned. |
 
-### Response
+#### Response
 
-#### Success
+##### Success
 ```
 {
   "user": {
@@ -37,7 +37,7 @@ Authenticates users. [Read this to authenticate with PAM](docs/PAM.md)
   }
 }
 ```
-#### Error
+##### Error
 ```
 {
   "error": "Incorrect password"
