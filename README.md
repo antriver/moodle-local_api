@@ -1,6 +1,9 @@
 # Moodle API
 Provides a REST API to allow external software to access data from Moodle.
 
+## Screenshots
+![](https://www.classroomtechtools.com/assets/img/moodle-plugin-screenshots/local_api/1.png)
+
 ## Setup
 ```bash
 cd /path/to/moodle
