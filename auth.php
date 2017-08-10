@@ -89,7 +89,6 @@ switch ($mode) {
 
     default:
         $api->error('invalid_mode', 400);
-
 }
 
 if (empty($username)) {
@@ -115,13 +114,13 @@ if (password_verify($password, $user->password)) {
     // Specify what information to give in the response
     // (Don't want to give unnecessary stuff here)
     $response['user'] = array(
-        'id' => $user->id,
-        'idnumber' => $user->idnumber,
-        'username' => $user->username,
-        'email' => $user->email,
-        'auth' => $user->auth,
+        'id'        => $user->id,
+        'idnumber'  => $user->idnumber,
+        'username'  => $user->username,
+        'email'     => $user->email,
+        'auth'      => $user->auth,
         'firstname' => $user->firstname,
-        'lastname' => $user->lastname,
+        'lastname'  => $user->lastname,
     );
 } else {
     $api->error('auth_incorrect_password', 403);

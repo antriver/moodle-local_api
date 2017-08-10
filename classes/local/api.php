@@ -22,8 +22,7 @@
 
 namespace local_api\local;
 
-class api
-{
+class api {
     public $oputputjson = true;
 
     /**
@@ -38,8 +37,8 @@ class api
     /**
      * Output an error message and quit.
      *
-     * @param  string $string         Name of a string in the language file to output.
-     * @param  int $statuscode
+     * @param  string $string Name of a string in the language file to output.
+     * @param  int    $statuscode
      */
     public function error($string, $statuscode = null) {
 
